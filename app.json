@@ -1,0 +1,10 @@
+{
+    "expo": {
+      "sdkVersion": "31.0.0",
+      "name": "nopsagame",
+      "slug": "nopsagame",
+      "version": "0.1.0",
+      "description": "A cards game",
+      "primaryColor": "#ff8179"
+    }
+  }
