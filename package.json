@@ -2,6 +2,7 @@
   "name": "nopsagame",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://satuhyva.github.io/nopsagame",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -30,7 +31,9 @@
     "android": "expo android",
     "ios": "expo ios",
     "build:ios": "expo build:ios",
-    "build:android": "expo build:android"
+    "build:android": "expo build:android",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app",
