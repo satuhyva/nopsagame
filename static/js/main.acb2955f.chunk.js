@@ -1,0 +1,2 @@
+(this.webpackJsonpnopsagame=this.webpackJsonpnopsagame||[]).push([[0],{41:function(e,n,t){e.exports=t(53)},53:function(e,n,t){"use strict";t.r(n);var a=t(0),r=t.n(a),l=t(10),c=t.n(l),o=t(56),u=t(57),s=function(){return r.a.createElement(o.a,null,r.a.createElement(u.a,null,"HUHUUUUU"))};c.a.render(r.a.createElement(r.a.StrictMode,null,r.a.createElement(s,null)),document.getElementById("root"))}},[[41,1,2]]]);
+//# sourceMappingURL=main.acb2955f.chunk.js.map
