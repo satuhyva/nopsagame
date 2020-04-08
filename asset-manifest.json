@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.js": "/nopsagame/static/js/main.48286506.chunk.js",
-    "main.js.map": "/nopsagame/static/js/main.48286506.chunk.js.map",
+    "main.js": "/nopsagame/static/js/main.8e874f76.chunk.js",
+    "main.js.map": "/nopsagame/static/js/main.8e874f76.chunk.js.map",
     "runtime-main.js": "/nopsagame/static/js/runtime-main.a33e4a5b.js",
     "runtime-main.js.map": "/nopsagame/static/js/runtime-main.a33e4a5b.js.map",
-    "static/js/2.bd1ea063.chunk.js": "/nopsagame/static/js/2.bd1ea063.chunk.js",
-    "static/js/2.bd1ea063.chunk.js.map": "/nopsagame/static/js/2.bd1ea063.chunk.js.map",
+    "static/js/2.2937618b.chunk.js": "/nopsagame/static/js/2.2937618b.chunk.js",
+    "static/js/2.2937618b.chunk.js.map": "/nopsagame/static/js/2.2937618b.chunk.js.map",
     "index.html": "/nopsagame/index.html",
-    "precache-manifest.94af61f424a200671bfcd71b6402956d.js": "/nopsagame/precache-manifest.94af61f424a200671bfcd71b6402956d.js",
+    "precache-manifest.846cd42362d94b2155aa7e05a8e4bc32.js": "/nopsagame/precache-manifest.846cd42362d94b2155aa7e05a8e4bc32.js",
     "service-worker.js": "/nopsagame/service-worker.js",
-    "static/js/2.bd1ea063.chunk.js.LICENSE.txt": "/nopsagame/static/js/2.bd1ea063.chunk.js.LICENSE.txt"
+    "static/js/2.2937618b.chunk.js.LICENSE.txt": "/nopsagame/static/js/2.2937618b.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.a33e4a5b.js",
-    "static/js/2.bd1ea063.chunk.js",
-    "static/js/main.48286506.chunk.js"
+    "static/js/2.2937618b.chunk.js",
+    "static/js/main.8e874f76.chunk.js"
   ]
 }
