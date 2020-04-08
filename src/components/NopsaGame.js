@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, Dimensions, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import Gameboard from './Gameboard'
-import SetNewGame from './SetNewGame'
+import SetUpNewGame from '../components/SetUpNewGame/SetUpNewGame'
 
 
 const NopsaGame = (props) => {
@@ -27,7 +27,6 @@ const NopsaGame = (props) => {
         },
         titleView: {
             height: unitHeight / 2,
-            justifyContent: 'center',
             alignItems: 'center',
         },
         titleText: {
@@ -43,28 +42,32 @@ const NopsaGame = (props) => {
         },
     })
 
+    const Header = () => {
+        return (
+            <View style={styles.titleView}>
+                <Text style={styles.titleText}>nopsa</Text>
+                <Text style={styles.infoText}>a card game for those with skill, speed and luck</Text>
+            </View>
+        )
+    }
 
 
     return (
         <View>
             <View style={styles.screen}>
                 <View style={styles.appContainer}>
+                    <Header/>
                     {props.game.isOn ?
                         <Gameboard
                             unitWidth={unitWidth}
                             unitHeight={unitHeight}
                         />
                         :
-                        <View>
-                            <View style={styles.titleView}>
-                                <Text style={styles.titleText}>nopsa</Text>
-                                <Text style={styles.infoText}>a card game for those with skill, speed and luck</Text>
-                            </View>
-                            <SetNewGame
-                                unitWidth={unitWidth}
-                                unitHeight={unitHeight}
-                            />
-                        </View>
+                        <SetUpNewGame
+                            unitWidth={unitWidth}
+                            unitHeight={unitHeight}
+                        />
+
                     }
                 </View>
             </View>

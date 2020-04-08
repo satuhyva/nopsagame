@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { View } from 'react-native'
 import { connect } from 'react-redux'
 
 
 
 // Gameboard area sizes shall be the following (* unitHeight):
-//      0.5 title area
+//      0.5 header area
 //      1.5 computer solitaire area
 //      0.8 spacing
 //      1.0 playing packs
@@ -16,15 +16,16 @@ import { connect } from 'react-redux'
 
 
 const Gameboard = (props) => {
+    console.log('props', props)
     return (
-        <View></View>
+        <View>
+        </View>
     )
 }
 
 const mapStateToProps = state => {
     return {
         game: state.game,
-        view: state.view,
     }
 }
 
