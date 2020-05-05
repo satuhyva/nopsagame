@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, Dimensions, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
-import Gameboard from './Gameboard'
+import Gameboard from './PlayTheGame/Gameboard'
 import SetUpNewGame from '../components/SetUpNewGame/SetUpNewGame'
 
 
@@ -11,6 +11,7 @@ const NopsaGame = (props) => {
     const screenHeight = Dimensions.get('window').height
     const unitWidth = Math.min(screenWidth / 6, (screenHeight / (6.6 * 1.7)))
     const unitHeight = 1.7 * unitWidth
+    const bufferLeft = (screenWidth - 6 * unitWidth) / 2
 
     const styles = StyleSheet.create({
         screen: {
@@ -18,7 +19,7 @@ const NopsaGame = (props) => {
             alignItems: 'center',
             width: screenWidth,
             height: screenHeight,
-            justifyContent: 'center',
+            // justifyContent: 'center',
         },
         appContainer: {
             width: unitWidth * 6,
@@ -54,18 +55,23 @@ const NopsaGame = (props) => {
 
     return (
         <View>
+            {/* <View style={{ width: unitWidth, height: 0.5 * unitHeight, backgroundColor: 'powderblue' }}></View>
+            <View style={{ width: unitWidth, height: 1.5 * unitHeight, backgroundColor: 'blue' }}></View>
+            <View style={{ width: unitWidth, height: 0.8 * unitHeight, backgroundColor: 'rosybrown' }}></View>
+            <View style={{ width: unitWidth, height: unitHeight, backgroundColor: 'blue' }}></View>
+            <View style={{ width: unitWidth, height: 0.8 * unitHeight, backgroundColor: 'rosybrown' }}></View>
+            <View style={{ width: unitWidth, height: 1.5 * unitHeight, backgroundColor: 'blue' }}></View>
+            <View style={{ width: unitWidth, height: 0.5 * unitHeight, backgroundColor: 'powderblue' }}></View> */}
             <View style={styles.screen}>
                 <View style={styles.appContainer}>
                     <Header/>
                     {props.game.isOn ?
-                        <Gameboard
-                            unitWidth={unitWidth}
-                            unitHeight={unitHeight}
-                        />
+                        <Gameboard/>
                         :
                         <SetUpNewGame
                             unitWidth={unitWidth}
                             unitHeight={unitHeight}
+                            bufferLeft={bufferLeft}
                         />
 
                     }

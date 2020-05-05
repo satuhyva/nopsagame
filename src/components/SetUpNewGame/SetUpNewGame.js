@@ -36,6 +36,7 @@ const SetUpNewGame = (props) => {
     const [startSetting, setStartSetting] = useState(false)
     const unitHeight = props.unitHeight
     const unitWidth = props.unitWidth
+    const bufferLeft = props.bufferLeft
 
     const visibility = new Animated.Value(1)
     const animatedVisibility = { opacity: visibility }
@@ -62,6 +63,8 @@ const SetUpNewGame = (props) => {
                 playerStack: stacks[referenceStack.current.getSelectedStack().player],
                 computerStack : stacks[referenceStack.current.getSelectedStack().computer],
                 isOn: true,
+                unitWidth: unitWidth,
+                bufferLeft: bufferLeft,
             })
         }, 1000)
     }
