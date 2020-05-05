@@ -128,3 +128,51 @@ export const getCardStartNullStates = (cardCount) => {
     }
     return nullStates
 }
+
+// export const getCardDisbaledStates = (cardCount) => {
+//     let disabledStates = []
+//     for (let i = 0; i < cardCount; i++) {
+//         disabledStates.push(true)
+//     }
+//     return disabledStates
+// }
+
+export const getCardBelow = (playerCardIndex) => {
+    let index
+    switch (playerCardIndex) {
+    case 14:
+        index = 13
+        break
+    case 13:
+        index =  11
+        break
+    case 12:
+        index =  10
+        break
+    case 11:
+        index =  8
+        break
+    case 10:
+        index =  7
+        break
+    case 9:
+        index =  6
+        break
+    case 8:
+        index =  4
+        break
+    case 7:
+        index =  3
+        break
+    case 6:
+        index =  2
+        break
+    case 5:
+        index =  1
+        break
+    default:
+        index =  -1
+    }
+    return index
+
+}

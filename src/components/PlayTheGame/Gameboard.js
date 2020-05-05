@@ -3,7 +3,7 @@ import { View, TouchableOpacity, Text, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import GamingStacks from './GamingStacks'
 import PlayerCardControlled from './PlayerCardControlled'
-import { getPlayerCardActionsInDealing, getCardStartNullStates } from './helperFunctions.js'
+import { getPlayerCardActionsInDealing, getCardStartNullStates, getCardBelow } from './helperFunctions.js'
 
 
 
@@ -35,13 +35,16 @@ const Gameboard = (props) => {
     const [topmostGamingRight, setTopmostGamingRight] = useState('')
     const [dealingCount, setDealingCount] = useState(0)
     const [cardNull, setCardNull] = useState(getCardStartNullStates(playerStack.length))
+    // const [disabled, setDisabled] = useState(getCardDisbaledStates(playerStack.length))
 
     const rightDealingPackLocation = { x: (0.25 + 1 + 0.5 + 1 + 0.5 + 1 + 0.5) * unitWidth, y: (1.5 + 0.8) * unitHeight }
     const rightGamingPackLocation = { x: (0.25 + 1 + 0.5 + 1 + 0.5) * unitWidth, y: (1.5 + 0.8) * unitHeight }
 
-    const cardReferences = playerStack.map(card => React.createRef())
+    // const cardReferences = playerStack.map(card => React.createRef())
+    const [cardReferences] = useState(playerStack.map(card => React.createRef()))
 
     const dealSolitaires = () => {
+        // console.log(cardReferences)
         const dealingActions = getPlayerCardActionsInDealing(playerStack.length, unitWidth, bufferLeft)
         const numberOfActions =  playerStack.length > 15 ? 15 : playerStack.length
         for (let i = 0; i < numberOfActions; i++) {
@@ -67,6 +70,10 @@ const Gameboard = (props) => {
         const updatedNullStates = [ ...cardNull]
         updatedNullStates[playerCardIndex] = true
         setCardNull(updatedNullStates)
+        const indexOfCardBelow = getCardBelow(playerCardIndex)
+        if (indexOfCardBelow !== -1) {
+            cardReferences[indexOfCardBelow].current.performAction({ move: false, flip: true })
+        }
     }
 
     const displayPlayerCards = () => {
@@ -87,9 +94,6 @@ const Gameboard = (props) => {
             )
         })
     }
-    const [testingState, setTestingState] = useState(false)
-
-
 
     return (
         <View>

@@ -43,9 +43,23 @@ const PlayerCardControlled = React.forwardRef((props, ref) => {
 
     // for controlling card movement and flipping from a parent component:
     const performAction = (actions) => {
+        // console.log('TTTTTTTTTTTTTT')
+        if (actions.flip && !actions.move) {
+            Animated.sequence([
+                Animated.timing(animatedFlipPart1, {
+                    toValue: 90, tension: 10, friction: 10, duration: 300,
+                }),
+                Animated.timing(animatedFlipPart2, {
+                    toValue: 180, tension: 10, friction: 10, duration: 300,
+                }),
+            ]).start()
+            setTimeout(() => {
+                setDisplayCardFront(true)
+            }, 1600)
+            return
+        }
         const delay = actions.delay ? 1 : 0
         if (actions.move && actions.flip) {
-
             Animated.sequence([
                 Animated.delay(500 * index * delay),
                 Animated.timing(animatedMove, {
@@ -122,7 +136,6 @@ const PlayerCardControlled = React.forwardRef((props, ref) => {
             handleReleasedCard(gestureState.moveX, gestureState.moveY)
         },
     })
-
 
 
     const FlippableCard = () => {
