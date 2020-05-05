@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "07334a34a3a67eebe81aea73803aa9e4",
+    "revision": "48f96f57bd7231fb6be46c19af9bdd55",
     "url": "/nopsagame/index.html"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/nopsagame/static/js/2.d4bc4156.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "23c3e4317078fbb41a27",
-    "url": "/nopsagame/static/js/main.9816f0b7.chunk.js"
+    "revision": "9bcf0c5c03e7e82b8872",
+    "url": "/nopsagame/static/js/main.c276a433.chunk.js"
   },
   {
     "revision": "0e7c17384313e9bd6642",
