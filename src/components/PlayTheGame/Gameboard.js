@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import GamingStacks from './GamingStacks'
 import PlayerCardControlled from './PlayerCardControlled'
 import { getPlayerCardActionsInDealing, getCardStartNullStates, getCardBelow } from './helperFunctions.js'
-
+import ComputerCard from './ComputerCard'
 
 
 // Gameboard area heights shall be the following (* unitHeight):
@@ -25,7 +25,7 @@ const Gameboard = (props) => {
     const unitHeight = unitWidth * 1.7
     const bufferLeft = props.game.bufferLeft
     const playerStack = props.game.playerStack
-    // const computerStack = props.game.computerStack
+    const computerStack = props.game.computerStack
     // const speed = props.game.speed
     // const skill = props.game.skill
 
@@ -35,16 +35,19 @@ const Gameboard = (props) => {
     const [topmostGamingRight, setTopmostGamingRight] = useState('')
     const [dealingCount, setDealingCount] = useState(0)
     const [cardNull, setCardNull] = useState(getCardStartNullStates(playerStack.length))
-    // const [disabled, setDisabled] = useState(getCardDisbaledStates(playerStack.length))
+    const [computerCardNull, setComputerCardNull] = useState(getCardStartNullStates(computerStack.length))
 
     const rightDealingPackLocation = { x: (0.25 + 1 + 0.5 + 1 + 0.5 + 1 + 0.5) * unitWidth, y: (1.5 + 0.8) * unitHeight }
     const rightGamingPackLocation = { x: (0.25 + 1 + 0.5 + 1 + 0.5) * unitWidth, y: (1.5 + 0.8) * unitHeight }
+    const leftDealingPackLocation = { x: (0.25) * unitWidth, y: (1.5 + 0.8) * unitHeight }
+    const leftGamingPackLocation = { x: (0.25 + 1 + 0.5) * unitWidth, y: (1.5 + 0.8) * unitHeight }
 
-    // const cardReferences = playerStack.map(card => React.createRef())
+
+
     const [cardReferences] = useState(playerStack.map(card => React.createRef()))
+    const [computerCardReferences] = useState(computerStack.map(card => React.createRef()))
 
     const dealSolitaires = () => {
-        // console.log(cardReferences)
         const dealingActions = getPlayerCardActionsInDealing(playerStack.length, unitWidth, bufferLeft)
         const numberOfActions =  playerStack.length > 15 ? 15 : playerStack.length
         for (let i = 0; i < numberOfActions; i++) {
@@ -53,16 +56,36 @@ const Gameboard = (props) => {
     }
     const dealSingleCards = () => {
         const nextIndexToDeal = 15 + dealingCount
+        let increaseDealingcount = false
         if (playerStack.length > nextIndexToDeal) {
             cardReferences[nextIndexToDeal].current.performAction({ ...rightGamingPackLocation, move: true, flip: true, delay: false })
+            increaseDealingcount = true
         }
-        setTimeout(() => {
-            setDealingCount(dealingCount + 1)
-            setTopmostGamingRight(playerStack[nextIndexToDeal])
-            const updatedNullStates = [ ...cardNull]
-            updatedNullStates[nextIndexToDeal] = true
-            setCardNull(updatedNullStates)
-        }, 1600)
+        if (computerStack.length > nextIndexToDeal) {
+            computerCardReferences[nextIndexToDeal].current.performAction({ ...leftGamingPackLocation, move: true, flip: true, delay: false })
+            increaseDealingcount = true
+        }
+        if (playerStack.length > nextIndexToDeal) {
+            setTimeout(() => {
+                setTopmostGamingRight(playerStack[nextIndexToDeal])
+                const updatedNullStates = [ ...cardNull]
+                updatedNullStates[nextIndexToDeal] = true
+                setCardNull(updatedNullStates)
+            }, 1600)
+        }
+        if (computerStack.length > nextIndexToDeal) {
+            setTimeout(() => {
+                setTopmostGamingLeft(computerStack[nextIndexToDeal])
+                const updatedNullStates = [ ...computerCardNull]
+                updatedNullStates[nextIndexToDeal] = true
+                setComputerCardNull(updatedNullStates)
+            }, 1600)
+        }
+        if (increaseDealingcount) {
+            setTimeout(() => {
+                setDealingCount(dealingCount + 1)
+            }, 1700)
+        }
     }
 
     const updateRightGamingPack = (playerCardIndex) => {
@@ -94,6 +117,22 @@ const Gameboard = (props) => {
             )
         })
     }
+    const displayComputerCards = () => {
+        return computerStack.map((card, index) => {
+            return (
+                <ComputerCard
+                    key={index}
+                    index={index}
+                    unitWidth={unitWidth}
+                    origo={leftDealingPackLocation}
+                    ref={computerCardReferences[index]}
+                    card={card}
+                    bufferLeft={bufferLeft}
+                    isNull={computerCardNull[index]}
+                />
+            )
+        })
+    }
 
     return (
         <View>
@@ -105,6 +144,7 @@ const Gameboard = (props) => {
                 />
             </View>
             {displayPlayerCards()}
+            {displayComputerCards()}
             <View style={{ flexDirection: 'row' }}>
                 <View style={[ styles.buttonContainer, { position: 'absolute', top: (1.5 + 0.8 + 1 + 0.8 + 1.5) * unitHeight }]}>
                     <TouchableOpacity onPress={dealSolitaires} style={[styles.buttonView]}>
