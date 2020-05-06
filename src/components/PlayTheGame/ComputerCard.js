@@ -42,7 +42,18 @@ const ComputerCard = React.forwardRef((props, ref) => {
 
     // for controlling card movement and flipping from a parent component:
     const performAction = (actions) => {
-        // console.log('TTTTTTTTTTTTTT')
+
+        if (actions.return) {
+            Animated.sequence([
+                Animated.timing(animatedMove, {
+                    toValue: { x: actions.x -  origo.x, y: actions.y -  origo.y }, duration: 1000,
+                }),
+            ]).start()
+            setTimeout(() => {
+                setDisplayCardFront(true)
+            }, 1600)
+            return
+        }
         if (actions.flip && !actions.move) {
             Animated.sequence([
                 Animated.timing(animatedFlipPart1, {
@@ -78,6 +89,12 @@ const ComputerCard = React.forwardRef((props, ref) => {
         } else if (actions.move && actions.delay) {
             Animated.sequence([
                 Animated.delay(500 * index),
+                Animated.timing(animatedMove, {
+                    toValue: { x: actions.x -  origo.x, y: actions.y  -  origo.y }, duration: 1000,
+                }),
+            ]).start()
+        } else if (actions.move && !actions.delay) {
+            Animated.sequence([
                 Animated.timing(animatedMove, {
                     toValue: { x: actions.x -  origo.x, y: actions.y  -  origo.y }, duration: 1000,
                 }),

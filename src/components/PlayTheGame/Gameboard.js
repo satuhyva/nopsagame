@@ -3,7 +3,7 @@ import { View, TouchableOpacity, Text, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import GamingStacks from './GamingStacks'
 import PlayerCardControlled from './PlayerCardControlled'
-import { getPlayerCardActionsInDealing, getCardStartNullStates, getCardBelow } from './helperFunctions.js'
+import { getPlayerCardActionsInDealing, getCardStartNullStates, getCardBelow, getComputerCardActionsInDealing, getNextCardToPlay, valueIsSuitable, getComputerCardSolitaireLocationForDealing } from './helperFunctions.js'
 import ComputerCard from './ComputerCard'
 
 
@@ -36,6 +36,7 @@ const Gameboard = (props) => {
     const [dealingCount, setDealingCount] = useState(0)
     const [cardNull, setCardNull] = useState(getCardStartNullStates(playerStack.length))
     const [computerCardNull, setComputerCardNull] = useState(getCardStartNullStates(computerStack.length))
+    const [computerCardsVisible, setComputerCardsVisible] = useState('')
 
     const rightDealingPackLocation = { x: (0.25 + 1 + 0.5 + 1 + 0.5 + 1 + 0.5) * unitWidth, y: (1.5 + 0.8) * unitHeight }
     const rightGamingPackLocation = { x: (0.25 + 1 + 0.5 + 1 + 0.5) * unitWidth, y: (1.5 + 0.8) * unitHeight }
@@ -53,7 +54,16 @@ const Gameboard = (props) => {
         for (let i = 0; i < numberOfActions; i++) {
             cardReferences[i].current.performAction(dealingActions[i])
         }
+        const dealingActionsComputerCards = getComputerCardActionsInDealing(computerStack.length, unitWidth, bufferLeft)
+        const numberOfActionsComputer =  computerStack.length > 15 ? 15 : computerStack.length
+        for (let i = 0; i < numberOfActionsComputer; i++) {
+            computerCardReferences[i].current.performAction(dealingActionsComputerCards[i])
+        }
+        setTimeout(() => {
+            setComputerCardsVisible([0, 5, 9, 12, 14])
+        }, 12000)
     }
+
     const dealSingleCards = () => {
         const nextIndexToDeal = 15 + dealingCount
         let increaseDealingcount = false
@@ -96,6 +106,39 @@ const Gameboard = (props) => {
         const indexOfCardBelow = getCardBelow(playerCardIndex)
         if (indexOfCardBelow !== -1) {
             cardReferences[indexOfCardBelow].current.performAction({ move: false, flip: true })
+        }
+    }
+
+    const updateRightGamingPackOrReturnComputerCard = (sideAndIndex) => {
+        const topmostValue = sideAndIndex.side === 'left' ? topmostGamingLeft.value : topmostGamingRight.value
+        const isTheCardStillSuitable = valueIsSuitable(topmostValue, computerStack[sideAndIndex.indexOfVisible].value)
+        // console.log('isTheCardStillSuitable',isTheCardStillSuitable)
+        if (isTheCardStillSuitable) {
+            console.log('on sopiva ja tietokone ehti ensin')
+            if (sideAndIndex.side === 'right') {
+                setTopmostGamingRight(computerStack[sideAndIndex.indexOfVisible])
+                const updatedNullStates = [ ...computerCardNull]
+                updatedNullStates[sideAndIndex.indexOfVisible] = true
+                setComputerCardNull(updatedNullStates)
+                const indexOfCardBelow = getCardBelow(sideAndIndex.indexOfVisible)
+                if (indexOfCardBelow !== -1) {
+                    computerCardReferences[indexOfCardBelow].current.performAction({ move: false, flip: true })
+                }
+            }
+        } else {
+            const location = getComputerCardSolitaireLocationForDealing(sideAndIndex.indexOfVisible, unitWidth, bufferLeft)
+            computerCardReferences[sideAndIndex.indexOfVisible].current.performAction({ ...location, move: true, flip: false, delay: false })
+        }
+    }
+
+    const computerPlayIfPossible = () => {
+        const nextToPlay = getNextCardToPlay(computerCardsVisible, computerStack, topmostGamingLeft, topmostGamingRight)
+        if (nextToPlay.side !== '') {
+            const targetPackPosition = nextToPlay.side === 'left' ? leftGamingPackLocation : rightGamingPackLocation
+            computerCardReferences[nextToPlay.indexOfVisible].current.performAction({ ...targetPackPosition, move: true, flip: false, delay: false })
+            setTimeout(() => {
+                updateRightGamingPackOrReturnComputerCard(nextToPlay)
+            }, 2000)
         }
     }
 
@@ -148,12 +191,17 @@ const Gameboard = (props) => {
             <View style={{ flexDirection: 'row' }}>
                 <View style={[ styles.buttonContainer, { position: 'absolute', top: (1.5 + 0.8 + 1 + 0.8 + 1.5) * unitHeight }]}>
                     <TouchableOpacity onPress={dealSolitaires} style={[styles.buttonView]}>
-                        <Text style={[styles.buttonText, { fontSize: unitHeight / 6 }]}>1</Text>
+                        <Text style={[styles.buttonText, { fontSize: unitHeight / 10 }]}>solitaire</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={[ styles.buttonContainer, { position: 'absolute', left: 75, top: (1.5 + 0.8 + 1 + 0.8 + 1.5) * unitHeight }]}>
                     <TouchableOpacity onPress={dealSingleCards} style={[styles.buttonView]}>
-                        <Text style={[styles.buttonText, { fontSize: unitHeight / 6 }]}>2</Text>
+                        <Text style={[styles.buttonText, { fontSize: unitHeight / 10 }]}>single</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={[ styles.buttonContainer, { position: 'absolute', left: 175, top: (1.5 + 0.8 + 1 + 0.8 + 1.5) * unitHeight }]}>
+                    <TouchableOpacity onPress={computerPlayIfPossible} style={[styles.buttonView]}>
+                        <Text style={[styles.buttonText, { fontSize: unitHeight / 10 }]}>computer next</Text>
                     </TouchableOpacity>
                 </View>
             </View>

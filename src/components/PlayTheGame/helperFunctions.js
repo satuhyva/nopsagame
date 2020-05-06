@@ -10,6 +10,38 @@ export const getPlayerCardActionsInDealing = (cardCount, unitWidth, bufferLeft) 
     return actions
 }
 
+export const getComputerCardActionsInDealing = (cardCount, unitWidth, bufferLeft) => {
+    let actions = []
+    for (let i = 0; i < cardCount; i++) {
+        if (i < 15) {
+            const location = getComputerCardSolitaireLocationForDealing(i, unitWidth, bufferLeft)
+            const willFlip = getCardFlipState(i, cardCount)
+            actions.push({ ...location, move: true, flip: willFlip, delay: true })
+        }
+    }
+    return actions
+}
+
+export const getNextCardToPlay = (computerCardsVisible, computerStack, topmostGamingLeft, topmostGamingRight) => {
+    // console.log(computerCardsVisible, topmostGamingLeft, topmostGamingRight)
+    // ensin vain helppo versio, eli meneekö mikään järjestyksessä vasemmalta oikealle
+    let sideAndindex = { side: '', indexOfVisible: '' }
+    for (let i = 0; i < computerCardsVisible.length; i++) {
+        const cardToTest = computerStack[computerCardsVisible[i]]
+        if (valueIsSuitable(topmostGamingLeft.value, cardToTest.value)) {
+            sideAndindex = { side: 'left', indexOfVisible: computerCardsVisible[i] }
+            return sideAndindex
+        }
+        if (valueIsSuitable(topmostGamingRight.value, cardToTest.value)) {
+            sideAndindex = { side: 'right', indexOfVisible: computerCardsVisible[i] }
+            return sideAndindex
+        }
+    }
+    return sideAndindex
+}
+
+
+
 
 
 export const getCardSolitaireLocationForDealing = (index, unitWidth, bufferLeft) => {
@@ -46,6 +78,48 @@ export const getCardSolitaireLocationForDealing = (index, unitWidth, bufferLeft)
         posY = origoY + (2 * 0.125) * unitHeight
         break
     case 5: case 6: case 7: case 8:
+        posY = origoY + (1 * 0.125) * unitHeight
+        break
+    default:
+        posY = origoY
+    }
+    return { x: posX, y: posY }
+}
+
+export const getComputerCardSolitaireLocationForDealing = (index, unitWidth, bufferLeft) => {
+    const unitHeight = 1.7 * unitWidth
+    const origoY =  0
+
+    let posX = bufferLeft > 0 ? bufferLeft : 0
+    switch (index) {
+    case 14: case 13: case 11: case 8: case 4:
+        posX += 1 / 6 * unitWidth
+        break
+    case 12: case 10: case 7: case 3:
+        posX += (2 / 6  + 1)* unitWidth
+        break
+    case 9: case 6: case 2:
+        posX +=  (3 / 6 + 2) * unitWidth
+        break
+    case 5: case 1:
+        posX +=  (4 / 6 + 3) * unitWidth
+        break
+    default:
+        posX +=  (5 / 6 + 4) * unitWidth
+    }
+
+    let posY = 0
+    switch (index) {
+    case 4: case 3: case 2: case 1: case 0:
+        posY = origoY + (4 * 0.125) * unitHeight
+        break
+    case 8: case 7: case 6: case 5:
+        posY = origoY + (3 * 0.125) * unitHeight
+        break
+    case 11: case 10: case 9:
+        posY = origoY + (2 * 0.125) * unitHeight
+        break
+    case 13: case 12:
         posY = origoY + (1 * 0.125) * unitHeight
         break
     default:
@@ -102,7 +176,6 @@ export const wasReleasedOnRightGamingPack = (releaseX, releaseY, unitWidth, buff
 }
 
 export const valueIsSuitable = (currentTopmostValue, newValue) => {
-    console.log('')
     if (currentTopmostValue === 1) {
         if (newValue === 2 || newValue === 13) {
             return true
@@ -118,7 +191,6 @@ export const valueIsSuitable = (currentTopmostValue, newValue) => {
             return false
         }
     }
-
 }
 
 export const getCardStartNullStates = (cardCount) => {
